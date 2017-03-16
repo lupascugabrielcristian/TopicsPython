@@ -32,7 +32,8 @@ class TopicsManger:
     def toJson(self):
         jsonString = []
         for topic in self.topics:
-            topicJson = {'id': topic.id, 'title': topic.title, 'comment': topic.comment, 'links': topic.links}
+            # topicJson = {'id': topic.id, 'title': topic.title, 'comment': topic.comment, 'links': topic.links}
+            topicJson = topic.toJson()
             jsonString.append(topicJson)
         return jsonString
 
@@ -60,14 +61,36 @@ class TopicsManger:
             newTopic.comment = comment
         except KeyError:
             newTopic.comment = "Ukn comment"
+        # try:
+        #     linksJson = topicJson['links']
+        #     links = map(lambda link: link, linksJson)
+        #     newTopic.links = links
+        # except KeyError:
+        #     newTopic.links = []
         try:
             linksJson = topicJson['links']
-            links = map(lambda link: link, linksJson)
-            newTopic.links = links
+            links = []
+            for linkJson in linksJson:
+                links.append(self.parseLink(linkJson))
         except KeyError:
             newTopic.links = []
         return newTopic
-        
+       
+    def parseLink(self, linkJson) :
+        newLink = Link.Link()
+        try:
+            url = linkJson['url']
+            newLink.url = url
+        except KeyError:
+            newLink.url = ""
+        try:
+            tags = linkJson['tags']
+            newLink.tags = tags
+        except KeyError:
+            newLink.tags = []
+        return newLink
+
+
     def getSourceFileName(self):
         return self.sourceFileName
 
@@ -129,7 +152,8 @@ class Topic:
                 desc += "\t" + constants.BOLD  + str(index + 1) + ". " + constants.RESET + self.links[index] + ", \n"
         desc += "\n"
         return desc
-    
-    # def __repr__(self):
-    #     return "Title: " + self.title + "\nLink: " + self.link[0] + "\ncomment: " + self.comment
-        
+
+    def toJson(self):
+        jsonString = {'id': topic.id, 'title': topic.title, 'comment': topic.comment}
+        # add links json
+        return jsonString

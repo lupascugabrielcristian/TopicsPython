@@ -66,6 +66,8 @@ class Command:
 			return self.searchTopics
 		elif self.name == constants.USE_DATASTORE_COMMAND:
 			return self.useDatastore
+		elif self.name == constants.ADD_TAG_COMMAND:
+			return self.addTags
 		
 	def addTopic(self, manager):
 		newTopic = Topic.Topic()
@@ -157,6 +159,17 @@ class Command:
 			if title.find(query) != -1:
 				print constants.BOLD +  str(index + 1) + ". " + constants.RESET + title
 
+	def addTags(self, manager):
+		if self.index == -1:
+			raise AssertionError("Index not found in command string")
+		linkIndex = self.getIntegerArgument("link")
+		tagsFound = self.getMultipleArgumets("t")
+		link = manager.get(self.index - 1).links[linkIndex - 1]
+		print "TagS: " + str(tagsFound)
+		print link
+		map(lambda tag: link.addTag(tag), tagsFound)
+		print "Donde"
+
 	def showAllData(self, manager):
 		print "\nAll topics: "
 		print manager
@@ -182,6 +195,23 @@ class Command:
 		if len(requiredArg) == 0:
 			raise CustomErrors.ArgumentNotFound(argumentName)
 		return str(requiredArg[0][1])
+
+	def getIntegerArgument(self, argumentName):
+		requiredArg = filter(lambda argument: argument[0] == argumentName, self.arguments)
+		if len(requiredArg) == 0:
+			raise CustomErrors.ArgumentNotFound(argumentName)
+		try:
+			linkIndex = int(requiredArg[0][1])
+			return linkIndex
+		except TypeError:
+			raise AssertionError("Link index could not be parsed")
+
+
+	def getMultipleArgumets(self, argumentName):
+		requiredArgs = filter(lambda argument: argument[0] == argumentName, self.arguments)
+		if len(requiredArgs) == 0:
+			raise CustomErrors.ArgumentNotFound(argumentName)
+		return map(lambda argPair: argPair[1], requiredArgs)
 
 	def haveArgument(self, argumentName):
 		requiredArg = filter(lambda argument: argument[0] == argumentName, self.arguments)
