@@ -26,6 +26,7 @@ SHOW_TOPIC = 'swt' # swt index
 SAVE_COMMAND = "save" #
 SEARCH_TOPICS_COMMAND = "st" # st search=[search_text]
 SEARCH_IN_LINKS_COMMAND = "sl"
+SEARCH_IN_TAGS_COMMAND = "stags" # stags search=[search_text]
 SHOW_COMMANDS = "sc"
 PRINT_COMMAND = "com"
 USE_DATASTORE_COMMAND = "use" # use db=[json_file_name]

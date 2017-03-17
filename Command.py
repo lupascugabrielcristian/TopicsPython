@@ -1,5 +1,6 @@
 import constants
 import Topic
+import Link
 import json
 import CustomErrors
 import os.path
@@ -64,6 +65,8 @@ class Command:
 			return self.showTopic
 		elif self.name == constants.SEARCH_TOPICS_COMMAND:
 			return self.searchTopics
+		elif self.name == constants.SEARCH_IN_TAGS_COMMAND:
+			return self.searchInTags
 		elif self.name == constants.USE_DATASTORE_COMMAND:
 			return self.useDatastore
 		elif self.name == constants.ADD_TAG_COMMAND:
@@ -82,7 +85,6 @@ class Command:
 		if self.index == -1:
 			raise AssertionError("Index not found in command string")
 		manager.remove(self.index)
-		print "Len: " + str(len(manager))
 		
 	def changeTitle(self, manager):
 		if self.index == -1:
@@ -97,12 +99,11 @@ class Command:
 	def addLink(self, manager):
 		if self.index == -1:
 			raise AssertionError("Index not found in command string")
-		linkArg = filter(lambda argument: argument[0] == "link", self.arguments)
-		if len(linkArg) > 0:
-			topic = manager.get(self.index - 1)
-			topic.links.append(linkArg[0][1])
-		else:
-			raise AssertionError("Link not found in command arguments")
+		url = self.getStringArgument("link")
+		topic = manager.get(self.index - 1)
+		newLink = Link.Link()
+		newLink.url = url
+		topic.links.append(newLink)
 
 	def changeComment(self, manager):
 		if self.index == -1:
@@ -159,6 +160,30 @@ class Command:
 			if title.find(query) != -1:
 				print constants.BOLD +  str(index + 1) + ". " + constants.RESET + title
 
+	def searchInTags(self, manager):
+		query = self.getStringArgument("search")
+		if len(manager) == 0:
+			raise AssertionError("There are no topics available")
+		print "\nFound:"
+		for index in range(0, len(manager)):
+			topic = manager.get(index)
+			if self.topicContainsTags(topic, query):
+				print constants.BOLD +  str(index + 1) + ". " + constants.RESET + topic.title
+
+	def topicContainsTags(self, topic, query):
+		links = topic.links
+		for link in links:
+			if self.linkContainsTags(link, query):
+				return True
+		return False
+
+	def linkContainsTags(self, link, query):
+		foundTags = filter(lambda tag: tag.find(query) != -1, link.tags)
+		if len(foundTags) > 0:
+			return True
+		else:
+			return False
+
 	def addTags(self, manager):
 		if self.index == -1:
 			raise AssertionError("Index not found in command string")
@@ -191,6 +216,8 @@ class Command:
 		requiredArg = filter(lambda argument: argument[0] == argumentName, self.arguments)
 		if len(requiredArg) == 0:
 			raise CustomErrors.ArgumentNotFound(argumentName)
+		if len(requiredArg[0][1]) < 1:
+			raise AssertionError("Argument " + argumentName + " has no value")
 		return str(requiredArg[0][1])
 
 	def getIntegerArgument(self, argumentName):

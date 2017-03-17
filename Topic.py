@@ -96,7 +96,6 @@ class TopicsManger:
     def remove(self, index):
         if index < 0 or index > len(self.topics):
             raise AssertionError("Index is not in range: " + str(index))
-        print "Index: " + str(index)
         del self.topics[index - 1]
         return len(self.topics)
 

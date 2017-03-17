@@ -21,7 +21,7 @@ class Link:
         return stringRepresentation
 
     def __str__(self):
-        stringRepresentation = "Url: " + self.url + " | Tags: "
+        stringRepresentation = "LINK Url: " + self.url + " | Tags: "
         for tag in self.tags:
             stringRepresentation += str(tag) + " "
         return stringRepresentation
