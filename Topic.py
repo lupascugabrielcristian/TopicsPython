@@ -30,12 +30,11 @@ class TopicsManger:
 
 
     def toJson(self):
-        jsonString = []
+        jsonMap = []
         for topic in self.topics:
-            # topicJson = {'id': topic.id, 'title': topic.title, 'comment': topic.comment, 'links': topic.links}
             topicJson = topic.toJson()
-            jsonString.append(topicJson)
-        return jsonString
+            jsonMap.append(topicJson)
+        return jsonMap
 
 
     def parseLinks(self, linksJson):
@@ -61,17 +60,12 @@ class TopicsManger:
             newTopic.comment = comment
         except KeyError:
             newTopic.comment = "Ukn comment"
-        # try:
-        #     linksJson = topicJson['links']
-        #     links = map(lambda link: link, linksJson)
-        #     newTopic.links = links
-        # except KeyError:
-        #     newTopic.links = []
         try:
             linksJson = topicJson['links']
             links = []
             for linkJson in linksJson:
                 links.append(self.parseLink(linkJson))
+            newTopic.links = links
         except KeyError:
             newTopic.links = []
         return newTopic
@@ -144,16 +138,18 @@ class Topic:
         idNumber = random.randint(0,100000)
         return str(idNumber)
 
+    def toJson(self):
+        jsonMap = {'id': self.id, 'title': self.title, 'comment': self.comment}
+        linksJson = []
+        map(lambda link: linksJson.append(link.toJson()), self.links)
+        jsonMap["links"] = linksJson
+        return jsonMap
+
     def __str__(self):
         desc =  "\nTitle: " + constants.UNDERLINE + self.title + constants.RESET + "\ncomment: " + self.comment + "\n" 
         if self.links != None and len(self.links) > 0:
             desc += "Links: \n"
             for index in range(0 , len(self.links)):
-                desc += "\t" + constants.BOLD  + str(index + 1) + ". " + constants.RESET + self.links[index] + ", \n"
+                desc += "\t" + constants.BOLD  + str(index + 1) + ". " + constants.RESET + str(self.links[index]) + "\n"
         desc += "\n"
         return desc
-
-    def toJson(self):
-        jsonString = {'id': topic.id, 'title': topic.title, 'comment': topic.comment}
-        # add links json
-        return jsonString

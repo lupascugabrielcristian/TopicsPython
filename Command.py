@@ -165,10 +165,7 @@ class Command:
 		linkIndex = self.getIntegerArgument("link")
 		tagsFound = self.getMultipleArgumets("t")
 		link = manager.get(self.index - 1).links[linkIndex - 1]
-		print "TagS: " + str(tagsFound)
-		print link
 		map(lambda tag: link.addTag(tag), tagsFound)
-		print "Donde"
 
 	def showAllData(self, manager):
 		print "\nAll topics: "

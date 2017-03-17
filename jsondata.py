@@ -101,6 +101,8 @@ def runCommand():
             print constants.WARNING + "Command failed" + constants.RESET + ". Reason: " + str(e)
         except CustomErrors.DataStoreError as e2:
             print constants.WARNING + "Command completed with problems" + constants.RESET + ". " + str(e2)
+        except Exception as e3:
+            print constants.WARNING + "Command failed. "  + constants.RESET + str(e3)
 
 def showMenu():
     print ("Available options are")
