@@ -31,3 +31,4 @@ SHOW_COMMANDS = "sc"
 PRINT_COMMAND = "com"
 USE_DATASTORE_COMMAND = "use" # use db=[json_file_name]
 ADD_TAG_COMMAND = "tag" # tag index link=[link_index] t=[tag_string] t=[tag_string]
+UPLOAD_COMMAND = "upload"

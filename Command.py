@@ -71,6 +71,8 @@ class Command:
 			return self.useDatastore
 		elif self.name == constants.ADD_TAG_COMMAND:
 			return self.addTags
+		elif self.name = constants.UPLOAD_COMMAND:
+			return self.uploadManager
 		
 	def addTopic(self, manager):
 		newTopic = Topic.Topic()
@@ -211,6 +213,10 @@ class Command:
 		print "Saving to " + fileName
 		with open(fileName, 'w') as outfile:
 			json.dump(jsonData, outfile)
+
+	def uploadManager(self, manager):
+		jsonData = manager.toJson()
+		fileName = manager.getSourceFileName()
 
 	def getStringArgument(self, argumentName):
 		requiredArg = filter(lambda argument: argument[0] == argumentName, self.arguments)
