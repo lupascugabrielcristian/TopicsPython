@@ -71,7 +71,7 @@ class Command:
 			return self.useDatastore
 		elif self.name == constants.ADD_TAG_COMMAND:
 			return self.addTags
-		elif self.name = constants.UPLOAD_COMMAND:
+		elif self.name == constants.UPLOAD_COMMAND:
 			return self.uploadManager
 		
 	def addTopic(self, manager):
