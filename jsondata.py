@@ -101,6 +101,10 @@ def runCommand():
             print constants.WARNING + "Command failed" + constants.RESET + ". Reason: " + str(e)
         except CustomErrors.DataStoreError as e2:
             print constants.WARNING + "Command completed with problems" + constants.RESET + ". " + str(e2)
+        except CustomErrors.CommandUnknown:
+            print ("Unknown command")
+        except CustomErrors.CommandInsuficient:
+            continue 
         except Exception as e3:
             print constants.WARNING + "Command failed. "  + constants.RESET + str(e3)
 

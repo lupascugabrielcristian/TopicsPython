@@ -16,6 +16,8 @@ class Command:
 	arguments = []
 
 	def __init__(self, commandString):
+		if len(commandString) < 1:
+			raise CustomErrors.CommandInsuficient()
 		self.parseCommandString(commandString)
 		if self.haveArgument(constants.PRINT_COMMAND):
 			print "Command parsed " + constants.GREEN + "OK" + constants.RESET
@@ -44,9 +46,7 @@ class Command:
 
 	def execute(self):
 		if self.name == "":
-			print constants.RED + "Command empty" + constants.RESET
 			return
-			print "Executing"
 		if self.name == constants.ADD_TOPIC_COMMAND:
 			return self.addTopic
 		elif self.name == constants.REMOVE_TOPIC_COMMAND:
@@ -79,6 +79,10 @@ class Command:
 			return self.uploadManager
 		elif self.name == constants.DOWNLOAD_COMMAND:
 			return self.downloadJsonData
+		elif self.name == constants.SHOW_DBS_COMMAND:
+			return self.showPossibleManagers
+		else:
+			raise CustomErrors.CommandUnknown()
 		
 	def addTopic(self, manager):
 		newTopic = Topic.Topic()
@@ -235,11 +239,16 @@ class Command:
 			print constants.GREEN + "Manager updated" + constants.RESET
 		else:
 			print("Cannot update manager with file " + str(fileName))
+		self.showPossibleManagers()
+		
+
+	def showPossibleManagers(self, manager=None):
 		managers = self.getAvailableManagers()
 		if len(managers) == 0:
 			print("No available managers")
 		else:
 			print "Available managers: " + constants.WARNING + ", ".join(managers) + constants.RESET
+
 
 	def getAvailableManagers(self):
 		managers = []

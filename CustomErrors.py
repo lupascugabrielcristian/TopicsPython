@@ -4,6 +4,18 @@ class ArgumentNotFound(Exception):
     def __str__(self):
         return repr(self.value)
 
+class CommandInsuficient(Exception):
+    def __init__(self):
+        self.value = "Command insufficient"
+    def __str__(self):
+        return repr(self.value)
+
+class CommandUnknown(Exception):
+    def __init__(self):
+        self.value = "Command unkown"
+    def __str__(self):
+        return repr(self.value)
+
 class DataStoreError(Exception):
     def __init__(self, value):
         self.value = value
