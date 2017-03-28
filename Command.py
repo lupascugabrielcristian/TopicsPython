@@ -1,8 +1,12 @@
+import sys
+sys.path.insert(0, './Uploading')
+
 import constants
 import Topic
 import Link
 import json
 import CustomErrors
+import Uploading
 import os.path
 
 class Command:
@@ -73,6 +77,8 @@ class Command:
 			return self.addTags
 		elif self.name == constants.UPLOAD_COMMAND:
 			return self.uploadManager
+		elif self.name == constants.DOWNLOAD_COMMAND:
+			return self.downloadJsonData
 		
 	def addTopic(self, manager):
 		newTopic = Topic.Topic()
@@ -82,6 +88,7 @@ class Command:
 		else:
 			 newTopic.title = "Default title"
 		manager.add(newTopic)
+		print ("Added topic number " + str(len(manager)))
 
 	def removeTopic(self, manager):
 		if self.index == -1:
@@ -106,6 +113,7 @@ class Command:
 		newLink = Link.Link()
 		newLink.url = url
 		topic.links.append(newLink)
+		print("Added link number " + str(len(topic.links)))
 
 	def changeComment(self, manager):
 		if self.index == -1:
@@ -213,10 +221,20 @@ class Command:
 		print "Saving to " + fileName
 		with open(fileName, 'w') as outfile:
 			json.dump(jsonData, outfile)
+		Uploading.uploadJsons()
 
 	def uploadManager(self, manager):
 		jsonData = manager.toJson()
 		fileName = manager.getSourceFileName()
+
+	def downloadJsonData(self, manager):
+		Uploading.downloadJsons()
+		fileName = manager.getSourceFileName()
+		if os.path.isfile(fileName):
+			manager.fromFile(fileName)
+			print constants.GREEN + "Manager updated" + constants.RESET
+		else:
+			print("Cannot update manager with file " + str(fileName))
 
 	def getStringArgument(self, argumentName):
 		requiredArg = filter(lambda argument: argument[0] == argumentName, self.arguments)

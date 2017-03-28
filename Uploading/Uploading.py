@@ -1,7 +1,7 @@
 import os
 
-download_script = "./download.sh"
-upload_scipt = "./upload.sh"
+download_script = "./Uploading/download.sh"
+upload_scipt = "./Uploading/upload.sh"
 
 apikey = "8a598b90e251b3edaed8860761b4852a5cbd1"
 databaseName = "Topics-E26e"
