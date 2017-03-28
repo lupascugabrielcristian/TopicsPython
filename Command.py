@@ -235,6 +235,18 @@ class Command:
 			print constants.GREEN + "Manager updated" + constants.RESET
 		else:
 			print("Cannot update manager with file " + str(fileName))
+		managers = self.getAvailableManagers()
+		if len(managers) == 0:
+			print("No available managers")
+		else:
+			print "Available managers: " + constants.WARNING + ", ".join(managers) + constants.RESET
+
+	def getAvailableManagers(self):
+		managers = []
+		for file in os.listdir("."):
+			if file.find(".json") != -1:
+				managers.append(file[:-5])
+		return managers
 
 	def getStringArgument(self, argumentName):
 		requiredArg = filter(lambda argument: argument[0] == argumentName, self.arguments)
