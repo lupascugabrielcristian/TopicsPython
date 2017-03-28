@@ -1,3 +1,6 @@
-import uploading
+import Uploading
 
-uploading.downloadSpecificJson("data.json")
+#Uploading.uploadJsons()
+#Uploading.clearDatabase()
+Uploading.downloadJsons()
+
