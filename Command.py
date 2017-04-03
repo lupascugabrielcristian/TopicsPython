@@ -71,6 +71,8 @@ class Command:
 			return self.searchTopics
 		elif self.name == constants.SEARCH_IN_TAGS_COMMAND:
 			return self.searchInTags
+		elif self.name == constants.SEARCH_GENERAL_COMMAND:
+			return self.generalSearch
 		elif self.name == constants.USE_DATASTORE_COMMAND:
 			return self.useDatastore
 		elif self.name == constants.ADD_TAG_COMMAND:
@@ -183,6 +185,9 @@ class Command:
 			topic = manager.get(index)
 			if self.topicContainsTags(topic, query):
 				print constants.BOLD +  str(index + 1) + ". " + constants.RESET + topic.title
+
+	def generalSearch(self, manager):
+		query = 
 
 	def topicContainsTags(self, topic, query):
 		links = topic.links

@@ -4,6 +4,12 @@ class ArgumentNotFound(Exception):
     def __str__(self):
         return repr(self.value)
 
+class CommandInvalid(Exception):
+    def __init__(self, value=""):
+        self.value = "Command is invalid. " + str(value)
+    def __str__(self):
+        return repr(self.value)
+
 class CommandInsuficient(Exception):
     def __init__(self):
         self.value = "Command insufficient"
