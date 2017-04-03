@@ -95,7 +95,8 @@ def runCommand():
             command = raw_input("Command > ")
             if command == "exit":
                 return
-            com = Command.Command(command)
+            com = Command.Command()
+            com.parseCommandString(command)
             com.execute()(manager)
         except AssertionError as e:
             print constants.WARNING + "Command failed" + constants.RESET + ". Reason: " + str(e)

@@ -7,37 +7,39 @@ import Link
 import json
 import CustomErrors
 import Uploading
+import Arguments
 import os.path
 
 class Command:
 	index = -1
 	name = ""
-	options = []
 	arguments = []
+	parsedArguments = []
+	parser = None
 
-	def __init__(self, commandString):
-		if len(commandString) < 1:
-			raise CustomErrors.CommandInsuficient()
-		self.parseCommandString(commandString)
-		if self.haveArgument(constants.PRINT_COMMAND):
-			print "Command parsed " + constants.GREEN + "OK" + constants.RESET
-			print self
-
-
-	def parseCommandString(self, commandString):
-		if len(commandString.split(' ')) > 1:
-			self.name = commandString.split(' ')[0]
-		else:
-			self.name = commandString
-			return
+	def __init__(self):
+		self.parser = Arguments.Arguments()
 		
-		try:
-			self.index = int(commandString.split(' ')[1])
-			argumentsParts = commandString.split(' ')[2:]
-		except ValueError:
-			self.index = -1   
-			argumentsParts = commandString.split(' ')[1:]
-		self.arguments = map(lambda part: self.getArgument(part), argumentsParts)
+	def parseCommandString(self, commandString):
+		# if len(commandString) < 1:
+		# 	raise CustomErrors.CommandInsuficient()
+		# if len(commandString.split(' ')) > 1:
+		# 	self.name = commandString.split(' ')[0]
+		# else:
+		# 	self.name = commandString
+		# 	return
+		
+		# try:
+		# 	self.index = int(commandString.split(' ')[1])
+		# 	argumentsParts = commandString.split(' ')[2:]
+		# except ValueError:
+		# 	self.index = -1   
+		# 	argumentsParts = commandString.split(' ')[1:]
+		# self.arguments = map(lambda part: self.getArgument(part), argumentsParts)
+		self.parsedArguments = self.parser.parseCommandString(commandString)
+		self.index = self.parser.getIntegerArgument("index")
+		self.name = self.parser.getStringArgument("name")
+		self.arguments = self.parser.arguments
 		
 	def getArgument(self, text):
 		argumentName = text.split('=')[0]
@@ -187,7 +189,8 @@ class Command:
 				print constants.BOLD +  str(index + 1) + ". " + constants.RESET + topic.title
 
 	def generalSearch(self, manager):
-		query = 
+		queries = self.parser.getNoNameArguments()
+		print map(lambda q: q[1], queries)
 
 	def topicContainsTags(self, topic, query):
 		links = topic.links
