@@ -43,17 +43,19 @@ class Arguments:
 
 	def getArgumentsWithName(self, commandString):
 		# name='dfsd dfa'
-		copyCommand = commandString[:]
 
 		while 1:
-			index = copyCommand.find('=')
+			index = commandString.find('=')
 			if index == -1:
 				break
-			name = self.getNameBeforeEquals(copyCommand, index)
-			value = self.getValueAfterEquals(copyCommand, index)
-			self.arguments.append((name, value))
-			self.command = self.command.replace(str(name) + "=" + str(value), '')
-			copyCommand = copyCommand[index + len(name) + len(value) + 1:]
+			name = self.getNameBeforeEquals(commandString, index)
+			value = self.getValueAfterEquals(commandString, index)
+			toRemoveFrom = index - len(name)
+			toRemoveTo = value[1]
+			self.arguments.append((name, value[0]))
+			toReplace = commandString[toRemoveFrom: toRemoveTo + 1]
+			self.command = self.command.replace(toReplace, '')
+			commandString = commandString[index + len(name) + len(value[0]) + 1:]
 
 
 	def getArgumentsWithoutName(self, commandString):
@@ -67,12 +69,20 @@ class Arguments:
 	def getValueAfterEquals(self, commandString, index):
 		part = commandString[index + 1:]
 		if part[0] != '\'':
-			raise CustomErrors.CommandInvalid("Missing start ' at begining argument")
+			return self.getWordAfterEquals(commandString, index)
 		endArgIndex = part[1:].find('\'')
 		if endArgIndex == -1:
-			raise CustomErrors.CommandInvalid("Missing start ' at the end of argument")
+			raise CustomErrors.CommandInvalid("Missing character ' at the end of argument")
 		argumentValue = part[1:endArgIndex + 1]
-		return argumentValue
+		return (argumentValue, index + len(argumentValue) + 1)
+
+	def getWordAfterEquals(self, commandString, index):
+		part = commandString[index + 1:]
+		endArgIndex = part[1:].find(' ')
+		if endArgIndex == -1:
+			endArgIndex = len(commandString) - 1
+		argumentValue = part[0:endArgIndex + 1]
+		return (argumentValue, index + len(argumentValue))
 
 	def getNameBeforeEquals(self, commandString, index):
 		before = commandString[0:index]
