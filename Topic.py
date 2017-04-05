@@ -93,6 +93,18 @@ class TopicsManger:
             raise AssertionError("Invalid index required from topics manager")
         return self.topics[index]
 
+    def getIndexOfTopic(self, topic):
+        for i in range(0, len(self.topics)):
+            if topic == self.topics[i]:
+                return i
+        return -1
+
+    def getIndexOfId(self, id):
+        for i in range(0, len(self.topics)):
+            if id == self.topics[i].id:
+                return i
+        return -1
+
     def remove(self, index):
         if index < 0 or index > len(self.topics):
             raise AssertionError("Index is not in range: " + str(index))

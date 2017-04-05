@@ -8,6 +8,7 @@ import json
 import CustomErrors
 import Uploading
 import Arguments
+import Searching
 import os.path
 
 class Command:
@@ -21,30 +22,13 @@ class Command:
 		self.parser = Arguments.Arguments()
 		
 	def parseCommandString(self, commandString):
-		# if len(commandString) < 1:
-		# 	raise CustomErrors.CommandInsuficient()
-		# if len(commandString.split(' ')) > 1:
-		# 	self.name = commandString.split(' ')[0]
-		# else:
-		# 	self.name = commandString
-		# 	return
-		
-		# try:
-		# 	self.index = int(commandString.split(' ')[1])
-		# 	argumentsParts = commandString.split(' ')[2:]
-		# except ValueError:
-		# 	self.index = -1   
-		# 	argumentsParts = commandString.split(' ')[1:]
-		# self.arguments = map(lambda part: self.getArgument(part), argumentsParts)
 		self.parsedArguments = self.parser.parseCommandString(commandString)
-		self.index = self.parser.getIntegerArgument("index")
 		self.name = self.parser.getStringArgument("name")
 		self.arguments = self.parser.arguments
-		
-	def getArgument(self, text):
-		argumentName = text.split('=')[0]
-		argumentValue = text.split('=')[1]
-		return(argumentName, argumentValue)
+		try:
+			self.index = self.parser.getIntegerArgument("index")
+		except CustomErrors.ArgumentNotFound:
+			self.index = -1
 
 	def execute(self):
 		if self.name == "":
@@ -190,7 +174,17 @@ class Command:
 
 	def generalSearch(self, manager):
 		queries = self.parser.getNoNameArguments()
-		print map(lambda q: q[1], queries)
+		result = Searching.generalSearch(queries, manager)
+		topics = result[0]
+		links = result[1]
+		print "\n" + constants.UNDERLINE +  "Topics" + constants.RESET
+		for topic in topics:
+			index = manager.getIndexOfTopic(topic)
+			print "Index " + str(index + 1) + constants.RESET + " " + topic.title
+		print "\n" + constants.UNDERLINE + "Links" + constants.RESET
+		for link in links:
+			print link
+		
 
 	def topicContainsTags(self, topic, query):
 		links = topic.links

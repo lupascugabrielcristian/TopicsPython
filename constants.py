@@ -35,3 +35,4 @@ ADD_TAG_COMMAND = "tag" # tag index link=[link_index] t=[tag_string] t=[tag_stri
 UPLOAD_COMMAND = "upload"
 DOWNLOAD_COMMAND = "download" # download
 SHOW_DBS_COMMAND = "dbs" # dbs
+OPEN_LINK_COMMAND = "open" # open [topic index] link=[link index]
