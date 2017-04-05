@@ -30,16 +30,15 @@ class Arguments:
 
 	def getIndex(self, commandString):
 		allParts = commandString.split(' ')
-		index = -1
 		for part in allParts:
 			try:
 				index = int(part)
+				self.arguments.append(("index", index))
 				allParts.remove(part)
 				self.command = " ".join(allParts)
 				break
 			except ValueError:
 				continue
-		self.arguments.append(("index", index))
 
 	def getArgumentsWithName(self, commandString):
 		# name='dfsd dfa'
@@ -70,11 +69,11 @@ class Arguments:
 		part = commandString[index + 1:]
 		if part[0] != '\'':
 			return self.getWordAfterEquals(commandString, index)
-		endArgIndex = part[1:].find('\'')
+		endArgIndex = part[1:].find('\'') + 1
 		if endArgIndex == -1:
 			raise CustomErrors.CommandInvalid("Missing character ' at the end of argument")
-		argumentValue = part[1:endArgIndex + 1]
-		return (argumentValue, index + len(argumentValue) + 1)
+		argumentValue = part[1:endArgIndex]
+		return (argumentValue, index + len(argumentValue) + 2)
 
 	def getWordAfterEquals(self, commandString, index):
 		part = commandString[index + 1:]

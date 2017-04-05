@@ -13,14 +13,18 @@ def test1():
 		print "No1 OK"
 	else:
 		print "No1 Failed"
+		print arguments.arguments
 
 def test2():
 	arguments.parseCommandString("search")
-	index = arguments.getIntegerArgument("index")
-	if index == -1 and len(arguments.arguments) == 1:
-		print "No2 OK"
-	else:
-		print "No2 Failed"
+	try:
+		arguments.getIntegerArgument("index")
+	except CustomErrors.ArgumentNotFound:
+		if len(arguments.arguments) == 1:
+			print "No2 OK"
+			return
+	print "No2 Failed"
+	print arguments.arguments
 
 def test3():
 	arguments.parseCommandString("search bla bla")
@@ -29,7 +33,7 @@ def test3():
 		print "No3 OK"
 	else:
 		print "No3 Failed"
-		print args
+		print arguments.arguments
 
 def test4():
 	arguments.parseCommandString("st t='ura'")
@@ -38,7 +42,7 @@ def test4():
 		print "No4 OK"
 	else:
 		print "NO4 Failed"
-		print val
+		print arguments.arguments
 
 def test5():
 	arguments.parseCommandString("st t='ura bora'")
@@ -47,7 +51,7 @@ def test5():
 		print "No5 OK"
 	else:
 		print "NO5 Failed"
-		print val
+		print arguments.arguments
 
 def test6():
 	arguments.parseCommandString("st t='ura' tt='bora'")
@@ -56,7 +60,7 @@ def test6():
 		print "No6 OK"
 	else:
 		print "NO6 Failed"
-		print val
+		print arguments.arguments
 
 def test7():
 	arguments.parseCommandString("search 4")
@@ -65,6 +69,7 @@ def test7():
 		print "No7 OK"
 	else:
 		print "No7 Failed"
+		print arguments.arguments
 
 def test8():
 	arguments.parseCommandString("tag 5 t='unu' t='doi'")
