@@ -92,6 +92,15 @@ def test9():
 		print arguments.arguments
 
 
+def test10():
+	arguments.parseCommandString("tag 12 link=1 t=tutorial")
+	tags = arguments.getMultipleArgumets("t")
+	if len(tags) == 1 and tags[0] == "tutorial" and len(arguments.arguments) == 4:
+		print "No10 OK"
+	else:
+		print "No10 Failed"
+		print arguments.arguments
+
 
 test1()
 test2()
@@ -102,3 +111,4 @@ test6()
 test7()
 test8()
 test9()
+test10()

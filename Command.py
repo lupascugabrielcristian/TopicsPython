@@ -203,8 +203,8 @@ class Command:
 	def addTags(self, manager):
 		if self.index == -1:
 			raise AssertionError("Index not found in command string")
-		linkIndex = self.getIntegerArgument("link")
-		tagsFound = self.getMultipleArgumets("t")
+		linkIndex = self.parser.getIntegerArgument("link")
+		tagsFound = self.parser.getMultipleArgumets("t")
 		link = manager.get(self.index - 1).links[linkIndex - 1]
 		map(lambda tag: link.addTag(tag), tagsFound)
 

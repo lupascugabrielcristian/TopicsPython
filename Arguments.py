@@ -54,7 +54,7 @@ class Arguments:
 			self.arguments.append((name, value[0]))
 			toReplace = commandString[toRemoveFrom: toRemoveTo + 1]
 			self.command = self.command.replace(toReplace, '')
-			commandString = commandString[index + len(name) + len(value[0]) + 1:]
+			commandString = commandString.replace(toReplace, '')
 
 
 	def getArgumentsWithoutName(self, commandString):
